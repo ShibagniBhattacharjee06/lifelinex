@@ -35,7 +35,7 @@ const Login = () => {
             >
                 <div className="text-center mb-8">
                     <div className="w-16 h-16 bg-white rounded-2xl shadow-lg shadow-teal-900/10 flex items-center justify-center overflow-hidden mx-auto mb-4">
-                        <img src="/logo.png" alt="AesculapHealth" className="w-12 h-12 object-contain" />
+                        <img src="/logo.png" alt="LifeLineX" className="w-12 h-12 object-contain" />
                     </div>
                     <h2 className="text-3xl font-black text-secondary mb-2">Welcome Back</h2>
                     <p className="text-slate-500 font-medium">Access the premier emergency network</p>
@@ -79,7 +79,7 @@ const Login = () => {
                 </form>
 
                 <p className="text-center text-slate-500 mt-8 text-sm font-medium">
-                    New to AesculapHealth? <Link to="/register" className="text-primary hover:text-primary-dark font-bold underline decoration-2 underline-offset-4">Create Account</Link>
+                    New to LifeLineX? <Link to="/register" className="text-primary hover:text-primary-dark font-bold underline decoration-2 underline-offset-4">Create Account</Link>
                 </p>
             </motion.div>
         </div>

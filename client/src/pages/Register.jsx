@@ -109,7 +109,7 @@ const Register = () => {
                             <div className="w-12 h-12 bg-white rounded-xl shadow-lg shadow-teal-900/10 flex items-center justify-center overflow-hidden">
                                 <img src="/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
                             </div>
-                            <span className="text-2xl font-black text-secondary tracking-tight">Aesculap<span className="text-primary">Health</span></span>
+                            <span className="text-2xl font-black text-secondary tracking-tight">LifeLine<span className="text-primary">X</span></span>
                         </div>
                         <h2 className="text-4xl font-bold text-secondary mb-2">Create Account</h2>
                         <p className="text-slate-500">Join the premier emergency response network.</p>

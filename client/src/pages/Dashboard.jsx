@@ -140,7 +140,7 @@ const Dashboard = () => {
                 <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-white rounded-xl shadow-lg shadow-teal-900/10 flex items-center justify-center overflow-hidden">
-                            <img src="/logo.png" alt="AesculapHealth" className="w-8 h-8 object-contain" />
+                            <img src="/logo.png" alt="LifeLineX" className="w-8 h-8 object-contain" />
                         </div>
                         <span className="font-black text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-600">
                             LifeLineX
