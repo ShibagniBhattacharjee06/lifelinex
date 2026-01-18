@@ -96,7 +96,7 @@ exports.login = async (req, res) => {
 // @access  Private
 exports.updateProfile = async (req, res) => {
     try {
-        const fields = ['name', 'age', 'bloodGroup', 'medicalHistory', 'emergencyContact', 'profileImage'];
+        const fields = ['name', 'age', 'bloodGroup', 'medicalHistory', 'emergencyContact', 'profileImage', 'location'];
         const updateData = {};
 
         fields.forEach(field => {

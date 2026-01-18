@@ -19,7 +19,7 @@ const EmergencyMap = ({ userLocation, hospitals = [] }) => {
     useEffect(() => {
         const fetchHeatmap = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/analytics/heatmap');
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/analytics/heatmap`);
                 setHeatmapData(data);
             } catch (err) {
                 console.error("Failed to load heatmap", err);

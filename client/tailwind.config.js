@@ -7,8 +7,16 @@ export default {
     theme: {
         extend: {
             colors: {
-                primary: '#DC2626', // Red-600 for emergency
-                secondary: '#1F2937', // Gray-800
+                primary: {
+                    DEFAULT: '#0f766e', // Deep Teal (Trust/Medical)
+                    dark: '#115e59',
+                    light: '#2dd4bf'
+                },
+                accent: {
+                    DEFAULT: '#ef4444', // Emergency Red
+                    hover: '#dc2626'
+                },
+                surface: '#f8fafc', // Clean White/Gray
             }
         },
     },

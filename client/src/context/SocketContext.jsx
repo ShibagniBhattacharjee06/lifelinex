@@ -6,29 +6,31 @@ const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
     const { user } = useContext(AuthContext);
-    const socket = useRef();
-    const [onlineUsers, setOnlineUsers] = useState([]);
+    const [socket, setSocket] = useState(null);
 
     useEffect(() => {
         if (user) {
-            socket.current = io(import.meta.env.VITE_API_URL);
+            const newSocket = io(import.meta.env.VITE_API_URL);
 
-            socket.current.emit("join_room", "global"); // Simple implementation
+            newSocket.emit("join_room", "global");
 
-            socket.current.on("receive_sos", (data) => {
-                // Can Handle global notifications here
+            newSocket.on("receive_sos", (data) => {
                 console.log("SOS RECEIVED:", data);
             });
 
+            setSocket(newSocket);
+
+            return () => newSocket.close();
         } else {
-            if (socket.current) {
-                socket.current.disconnect();
+            if (socket) {
+                socket.close();
+                setSocket(null);
             }
         }
     }, [user]);
 
     return (
-        <SocketContext.Provider value={{ socket: socket.current }}>
+        <SocketContext.Provider value={{ socket }}>
             {children}
         </SocketContext.Provider>
     );

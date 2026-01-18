@@ -1,8 +1,8 @@
-import { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import AuthContext from '../context/AuthContext';
 import SocketContext from '../context/SocketContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapIcon, BellAlertIcon, ArrowRightOnRectangleIcon, HeartIcon, PhoneIcon, MapPinIcon, XMarkIcon, ChartBarIcon } from '@heroicons/react/24/solid';
 import { Dialog } from '@headlessui/react';
@@ -54,10 +54,10 @@ const Dashboard = () => {
     const fetchActiveSOS = async () => {
         try {
             const token = localStorage.getItem('token');
-            const { data } = await axios.get('http://localhost:5000/api/sos/active', {
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/sos/active`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setSosList(data);
+            setSosList(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error(error);
         }
@@ -85,7 +85,7 @@ const Dashboard = () => {
                     bloodGroup: sosType === 'blood_request' ? selectedBloodGroup : null
                 };
 
-                await axios.post('http://localhost:5000/api/sos', payload, {
+                await axios.post(`${import.meta.env.VITE_API_URL}/api/sos`, payload, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             } catch (error) {
@@ -102,7 +102,7 @@ const Dashboard = () => {
     const handleRespond = async (sosId) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`http://localhost:5000/api/sos/${sosId}/respond`, {}, {
+            await axios.put(`${import.meta.env.VITE_API_URL}/api/sos/${sosId}/respond`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert('Response Confirmed!');
@@ -116,7 +116,7 @@ const Dashboard = () => {
     const handleDownloadReport = async (sosId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:5000/api/sos/${sosId}/report`, {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/sos/${sosId}/report`, {
                 headers: { Authorization: `Bearer ${token}` },
                 responseType: 'blob',
             });
@@ -139,18 +139,18 @@ const Dashboard = () => {
             <header className="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-white/50 shadow-sm transition-all">
                 <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-2 shadow-lg shadow-red-500/20">
-                            <HeartIcon className="w-6 h-6 text-white" />
+                        <div className="w-10 h-10 bg-white rounded-xl shadow-lg shadow-teal-900/10 flex items-center justify-center overflow-hidden">
+                            <img src="/logo.png" alt="AesculapHealth" className="w-8 h-8 object-contain" />
                         </div>
                         <span className="font-black text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-600">
                             LifeLineX
                         </span>
                     </div>
                     <div className="flex items-center gap-6">
-                        <div className="hidden md:block text-right">
+                        <Link to="/profile" className="hidden md:block text-right hover:bg-slate-50 p-2 rounded-lg transition-colors">
                             <p className="text-sm font-bold text-slate-800">{user.name}</p>
                             <p className="text-[10px] tracking-wider text-slate-500 uppercase font-bold">{user.role}</p>
-                        </div>
+                        </Link>
                         {user.profileImage && (
                             <div className="p-0.5 rounded-full bg-gradient-to-br from-red-500 to-blue-500">
                                 <img src={user.profileImage} alt="Profile" className="w-10 h-10 rounded-full border-2 border-white" />
