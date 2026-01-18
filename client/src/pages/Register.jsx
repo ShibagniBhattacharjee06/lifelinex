@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { UserCircleIcon, LockClosedIcon, CheckBadgeIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
 
 // Fix Leaflet Marker Icons
 import L from 'leaflet';
@@ -47,6 +48,7 @@ const Register = () => {
 
     const { register } = useContext(AuthContext);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const handleGetCurrentLocation = () => {
         if (navigator.geolocation) {
@@ -111,14 +113,14 @@ const Register = () => {
                             </div>
                             <span className="text-2xl font-black text-secondary tracking-tight">LifeLine<span className="text-primary">X</span></span>
                         </div>
-                        <h2 className="text-4xl font-bold text-secondary mb-2">Create Account</h2>
-                        <p className="text-slate-500">Join the premier emergency response network.</p>
+                        <h2 className="text-4xl font-bold text-secondary mb-2">{t('register.title')}</h2>
+                        <p className="text-slate-500">{t('register.subtitle')}</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {/* Role Selection */}
                         <div>
-                            <label className={labelClass}>I am a</label>
+                            <label className={labelClass}>{t('register.i_am')}</label>
                             <div className="grid grid-cols-3 gap-3">
                                 {['user', 'donor', 'hospital'].map((r) => (
                                     <div
@@ -128,7 +130,7 @@ const Register = () => {
                                             ? 'bg-primary text-white border-primary shadow-lg shadow-primary/30 scale-105'
                                             : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:border-slate-300'}`}
                                     >
-                                        {r}
+                                        {t(`register.role_${r}`)}
                                     </div>
                                 ))}
                             </div>
@@ -136,22 +138,22 @@ const Register = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
-                                <label className={labelClass}>Full Name</label>
+                                <label className={labelClass}>{t('register.full_name')}</label>
                                 <input className={inputClass} placeholder="John Doe" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
                             </div>
                             <div>
-                                <label className={labelClass}>Phone Number</label>
+                                <label className={labelClass}>{t('register.phone')}</label>
                                 <input className={inputClass} placeholder="+1 234 567 8900" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} required />
                             </div>
                         </div>
 
                         <div>
-                            <label className={labelClass}>Email Address</label>
+                            <label className={labelClass}>{t('register.email')}</label>
                             <input className={inputClass} type="email" placeholder="john@example.com" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} required />
                         </div>
 
                         <div>
-                            <label className={labelClass}>Password</label>
+                            <label className={labelClass}>{t('register.password')}</label>
                             <div className="relative">
                                 <input className={inputClass} type="password" placeholder="••••••••" value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} required />
                                 <LockClosedIcon className="w-5 h-5 text-slate-400 absolute right-4 top-3.5" />
@@ -161,14 +163,14 @@ const Register = () => {
                         {/* Location Section */}
                         <div className="space-y-3 pt-2">
                             <div className="flex justify-between items-center">
-                                <label className={labelClass}>Location Setup</label>
+                                <label className={labelClass}>{t('register.location_setup')}</label>
                                 <button
                                     type="button"
                                     onClick={handleGetCurrentLocation}
                                     className="text-xs font-bold text-primary flex items-center gap-1 hover:underline"
                                 >
                                     <MapPinIcon className="w-3 h-3" />
-                                    {useCurrentLoc ? 'Finding you...' : 'Use Current Location'}
+                                    {useCurrentLoc ? t('register.finding') : t('register.use_current_location')}
                                 </button>
                             </div>
 
@@ -178,7 +180,7 @@ const Register = () => {
                                     <LocationPicker location={location} setLocation={setLocation} />
                                 </MapContainer>
                             </div>
-                            <p className="text-xs text-slate-400 text-center">Tap the map to adjust your precise location pin.</p>
+                            <p className="text-xs text-slate-400 text-center">{t('register.tap_map')}</p>
                         </div>
 
                         {/* Role Specific Fields */}
@@ -186,9 +188,9 @@ const Register = () => {
                             {formData.role === 'donor' && (
                                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
                                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/10 mb-2">
-                                        <label className={labelClass}>Blood Group</label>
+                                        <label className={labelClass}>{t('register.blood_group')}</label>
                                         <select className={inputClass} value={formData.bloodGroup} onChange={e => setFormData({ ...formData, bloodGroup: e.target.value })} required>
-                                            <option value="">Select Group</option>
+                                            <option value="">{t('register.select_group')}</option>
                                             {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map(bg => <option key={bg} value={bg}>{bg}</option>)}
                                         </select>
                                     </div>
@@ -199,19 +201,19 @@ const Register = () => {
                                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
                                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/10 mb-2 space-y-4">
                                         <div>
-                                            <label className={labelClass}>Hospital / Bank Name</label>
+                                            <label className={labelClass}>{t('register.hospital_name')}</label>
                                             <input className={inputClass} value={formData.hospitalName} onChange={e => setFormData({ ...formData, hospitalName: e.target.value })} required />
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label className={labelClass}>Type</label>
+                                                <label className={labelClass}>{t('register.type')}</label>
                                                 <select className={inputClass} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })}>
                                                     <option value="Hospital">Hospital</option>
                                                     <option value="BloodBank">Blood Bank</option>
                                                 </select>
                                             </div>
                                             <div>
-                                                <label className={labelClass}>City/Area</label>
+                                                <label className={labelClass}>{t('register.city')}</label>
                                                 <input className={inputClass} value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} required />
                                             </div>
                                         </div>
@@ -221,7 +223,7 @@ const Register = () => {
                         </AnimatePresence>
 
                         <button type="submit" className="w-full bg-secondary hover:bg-slate-900 text-white font-bold py-4 rounded-xl shadow-xl shadow-slate-900/10 transition-all transform hover:scale-[1.01] mt-6">
-                            Create Account
+                            {t('register.submit')}
                         </button>
                     </form>
                 </div>
@@ -233,12 +235,12 @@ const Register = () => {
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full blur-3xl -ml-16 -mb-16"></div>
 
                     <div className="relative z-10">
-                        <h3 className="text-3xl font-bold mb-4">Why Join?</h3>
+                        <h3 className="text-3xl font-bold mb-4">{t('register.why_join')}</h3>
                         <ul className="space-y-6">
                             {[
-                                { title: 'Rapid Response', desc: 'Connect instantly with nearest ambulances.' },
-                                { title: 'Blood Network', desc: 'Real-time blood availability tracking.' },
-                                { title: 'Secure Data', desc: 'HIPAA compliant end-to-end encryption.' }
+                                { title: t('register.rapid_response'), desc: t('register.rapid_desc') },
+                                { title: t('register.blood_network'), desc: t('register.blood_desc') },
+                                { title: t('register.secure_data'), desc: t('register.secure_desc') }
                             ].map((item, i) => (
                                 <li key={i} className="flex items-start gap-4">
                                     <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center shrink-0">
@@ -255,7 +257,7 @@ const Register = () => {
 
                     <div className="mt-10 pt-10 border-t border-white/20 text-center relative z-10">
                         <Link to="/login" className="inline-block px-8 py-3 bg-white text-primary font-bold rounded-xl shadow-lg hover:bg-slate-50 transition-colors">
-                            I already have an account
+                            {t('register.have_account')}
                         </Link>
                     </div>
                 </div>
@@ -263,6 +265,5 @@ const Register = () => {
         </div>
     );
 };
-
 export default Register;
 

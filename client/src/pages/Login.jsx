@@ -3,12 +3,14 @@ import { useNavigate, Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import { UserCircleIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const [error, setError] = useState('');
+    const { t } = useTranslation();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,8 +39,8 @@ const Login = () => {
                     <div className="w-16 h-16 bg-white rounded-2xl shadow-lg shadow-teal-900/10 flex items-center justify-center overflow-hidden mx-auto mb-4">
                         <img src="/logo.png" alt="LifeLineX" className="w-12 h-12 object-contain" />
                     </div>
-                    <h2 className="text-3xl font-black text-secondary mb-2">Welcome Back</h2>
-                    <p className="text-slate-500 font-medium">Access the premier emergency network</p>
+                    <h2 className="text-3xl font-black text-secondary mb-2">{t('login.welcome')}</h2>
+                    <p className="text-slate-500 font-medium">{t('login.subtitle')}</p>
                 </div>
 
                 {error && (
@@ -56,7 +58,7 @@ const Login = () => {
                         <UserCircleIcon className="w-6 h-6 absolute left-4 top-3.5 text-slate-400" />
                         <input
                             type="email"
-                            placeholder="Email Address"
+                            placeholder={t('login.email_placeholder')}
                             className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-medium placeholder-slate-400"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -66,7 +68,7 @@ const Login = () => {
                         <LockClosedIcon className="w-6 h-6 absolute left-4 top-3.5 text-slate-400" />
                         <input
                             type="password"
-                            placeholder="Password"
+                            placeholder={t('login.password_placeholder')}
                             className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl py-3.5 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-medium placeholder-slate-400"
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -74,12 +76,12 @@ const Login = () => {
                     </div>
 
                     <button type="submit" className="w-full bg-secondary hover:bg-slate-900 text-white font-bold py-4 rounded-xl shadow-xl shadow-slate-900/10 transition-all transform hover:scale-[1.02]">
-                        Login to Account
+                        {t('login.btn')}
                     </button>
                 </form>
 
                 <p className="text-center text-slate-500 mt-8 text-sm font-medium">
-                    New to LifeLineX? <Link to="/register" className="text-primary hover:text-primary-dark font-bold underline decoration-2 underline-offset-4">Create Account</Link>
+                    {t('login.new_user')} <Link to="/register" className="text-primary hover:text-primary-dark font-bold underline decoration-2 underline-offset-4">{t('login.create_account')}</Link>
                 </p>
             </motion.div>
         </div>
