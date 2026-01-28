@@ -1,46 +1,114 @@
-# LifeLineX (formerly ERBNS)
+# 🚨 LifeLineX – Real-Time Emergency Response System
 
-A full-stack emergency response platform built with MERN stack.
+> **Live Emergency Response Network**  
+> Connecting users, hospitals, and blood donors in real time when every second matters.
 
-## Prerequisites
-- Node.js (v14+)
-- MongoDB (Running locally on default port 27017)
+---
 
-## Installation
+## 📖 Project Description
 
-1. **Backend Integration**
-   ```bash
-   cd server
-   npm install
-   ```
-   Create a `.env` file in `server/` (already created):
-   ```
-   MONGO_URI=mongodb://localhost:27017/erbns
-   JWT_SECRET=your_secret
-   PORT=5000
-   ```
+**LifeLineX** is a full-stack web application built to enable **instant emergency communication** between users, hospitals, and blood donors.
 
-2. **Frontend Integration**
-   ```bash
-   cd client
-   npm install
-   ```
+With a single **SOS action**, the system:
+- Shares the user’s **live GPS location**
+- Alerts **nearby hospitals in real time**
+- Notifies **matching blood donors** when blood is required
 
-## Running the App
+The entire workflow operates using **real-time WebSocket communication**, ensuring fast updates without manual refresh.
 
-Double-click `start.bat` in the root directory.
+---
 
-OR run manually:
-- **Server**: `cd server && npm run dev` (Runs on http://localhost:5000)
-- **Client**: `cd client && npm run dev` (Runs on http://localhost:5173)
+## 🎯 Project Vision
 
-## Features
-- **User**: Register, Login, Send SOS, View Map.
-- **donor**: Register with blood group, Receive alerts.
-- **Hospital**: Manage inventory (beds/blood).
+To build a **technology-driven emergency response platform** that minimizes delays, improves coordination, and helps medical responders act faster during critical situations.
 
-## Testing
-1. Register a user as "Hospital" to view the hospital dashboard.
-2. Register another user as "User".
-3. From "User" dashboard, click "Send SOS".
-4. "Hospital" dashboard should receive a real-time alert (if page is open).
+---
+
+## 🚀 Key Features
+
+- 🚨 **One-Tap SOS System** for emergency reporting  
+- 📍 **Live GPS Location Tracking**  
+- 🏥 **Real-Time Alerts to Hospitals**  
+- 🩸 **Blood Donor Notification System** (blood-group based)  
+- ⚡ **Live Responses & Updates** using Socket.io  
+- 👥 **Role-Based Access Control** (User / Hospital / Donor)  
+- 🗺️ **Interactive Map View** for hospitals and resources  
+- 🌍 **Multi-Language Support** (English, Hindi, Bengali)  
+- 🔐 **Secure Authentication** using JWT  
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React (Vite)
+- TailwindCSS
+- Socket.io Client
+- Leaflet / OpenStreetMap
+- i18next (Localization)
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB (Mongoose)
+- Socket.io
+- JWT Authentication
+
+### Deployment
+- Frontend: **Vercel**
+- Backend: **Render**
+- Database: **MongoDB Atlas**
+
+---
+
+## 🌐 Live Demo
+
+🔗 **Live Application**  
+👉 https://lifelinex-lime.vercel.app/
+
+---
+
+## 💻 Source Code
+
+🔗 **GitHub Repository**  
+👉 https://github.com/ShibagniBhattacharjee06/lifelinex
+
+---
+
+## ⚙️ Prerequisites
+
+Make sure you have the following installed before running the project locally:
+
+- Node.js (v14+ )
+- npm or yarn
+- MongoDB (local or MongoDB Atlas)
+- Git
+- Modern web browser
+
+---
+
+## 🔮 Future Scope
+
+- 📱 Progressive Web App (PWA) support  
+- 🚑 Ambulance dispatch integration  
+- 📊 Advanced analytics dashboard for hospitals  
+- 🔔 Push notifications for emergency alerts  
+- 🧠 AI-based emergency priority scoring  
+- 🗺️ Improved routing and location accuracy  
+
+---
+
+## 🤝 Contribution
+
+Contributions are welcome!  
+Feel free to fork the repository and submit a pull request with improvements or new features.
+
+---
+
+## 📬 Feedback
+
+Open to feedback, suggestions, and technical discussions to improve the system.
+
+---
+
+⭐ If you find this project useful, consider giving it a star!
