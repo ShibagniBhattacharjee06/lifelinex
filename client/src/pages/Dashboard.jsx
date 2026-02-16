@@ -9,6 +9,7 @@ import { Dialog } from '@headlessui/react';
 import HealthCardContent from '../components/HealthCardContent';
 import ChartComponent from '../components/ChartComponent';
 import { useTranslation } from 'react-i18next';
+import HealthcareNavbar from '../components/HealthcareNavbar';
 
 const Dashboard = () => {
     const { t } = useTranslation();
@@ -136,32 +137,7 @@ const Dashboard = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 relative font-sans text-slate-800">
             {/* Navbar */}
-            <header className="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md border-b border-white/50 shadow-sm transition-all">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-white rounded-xl shadow-lg shadow-teal-900/10 flex items-center justify-center overflow-hidden">
-                            <img src="/logo.png" alt="LifeLineX" className="w-8 h-8 object-contain" />
-                        </div>
-                        <span className="font-black text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-600">
-                            LifeLineX
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-6">
-                        <Link to="/profile" className="hidden md:block text-right hover:bg-slate-50 p-2 rounded-lg transition-colors">
-                            <p className="text-sm font-bold text-slate-800">{user.name}</p>
-                            <p className="text-[10px] tracking-wider text-slate-500 uppercase font-bold">{user.role}</p>
-                        </Link>
-                        {user.profileImage && (
-                            <div className="p-0.5 rounded-full bg-gradient-to-br from-red-500 to-blue-500">
-                                <img src={user.profileImage} alt="Profile" className="w-10 h-10 rounded-full border-2 border-white" />
-                            </div>
-                        )}
-                        <button onClick={logout} className="p-2 hover:bg-slate-100 rounded-full text-slate-500 hover:text-red-500 transition-colors">
-                            <ArrowRightOnRectangleIcon className="w-6 h-6" />
-                        </button>
-                    </div>
-                </div>
-            </header>
+            <HealthcareNavbar />
 
             <main className="max-w-7xl mx-auto p-6 md:p-10 pt-28">
                 {/* USER VIEW */}
@@ -171,7 +147,7 @@ const Dashboard = () => {
                             <motion.h1
                                 initial={{ y: 20, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
-                                className="text-4xl md:text-6xl font-black text-slate-800 tracking-tight"
+                                className="text-3xl md:text-6xl font-black text-slate-800 tracking-tight"
                             >
                                 {t('emergency_center')}
                             </motion.h1>
@@ -182,12 +158,12 @@ const Dashboard = () => {
 
                         <div className="flex justify-center my-12 relative">
                             {/* Pulse Rings */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-red-500/20 rounded-full animate-ping opacity-75"></div>
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-500/10 rounded-full animate-pulse"></div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[350px] md:h-[350px] bg-red-500/20 rounded-full animate-ping opacity-75"></div>
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[500px] md:h-[500px] bg-red-500/10 rounded-full animate-pulse"></div>
 
                             <button
                                 onClick={() => setIsSOSModalOpen(true)}
-                                className="relative z-10 w-72 h-72 rounded-full flex flex-col items-center justify-center text-white
+                                className="relative z-10 w-60 h-60 md:w-72 md:h-72 rounded-full flex flex-col items-center justify-center text-white
                                            bg-gradient-to-br from-red-500 to-red-700 shadow-[0_20px_60px_-10px_rgba(220,38,38,0.5)]
                                            transition-transform hover:scale-105 active:scale-95 group border-4 border-red-400/30"
                             >
@@ -220,6 +196,30 @@ const Dashboard = () => {
                                 </div>
                                 <h3 className="text-2xl font-bold text-slate-800 mb-2">{t('health_id')}</h3>
                                 <p className="text-slate-500">Access and share your digital health profile instantly.</p>
+                            </motion.div>
+
+                            <motion.div
+                                onClick={() => navigate('/lifestyle')}
+                                whileHover={{ y: -8, shadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)' }}
+                                className="bg-white/60 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-white/50 cursor-pointer group transition-all"
+                            >
+                                <div className="bg-purple-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-500 transition-colors duration-300">
+                                    <ChartBarIcon className="w-7 h-7 text-purple-600 group-hover:text-white transition-colors" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-slate-800 mb-2">Daily Lifestyle</h3>
+                                <p className="text-slate-500">Track habits, water, sleep, and mood daily.</p>
+                            </motion.div>
+
+                            <motion.div
+                                onClick={() => navigate('/impact')}
+                                whileHover={{ y: -8, shadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)' }}
+                                className="bg-white/60 backdrop-blur-sm p-8 rounded-3xl shadow-xl border border-white/50 cursor-pointer group transition-all"
+                            >
+                                <div className="bg-yellow-50 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-yellow-500 transition-colors duration-300">
+                                    <div className="w-7 h-7 text-yellow-600 group-hover:text-white transition-colors flex items-center justify-center font-black">★</div>
+                                </div>
+                                <h3 className="text-2xl font-bold text-slate-800 mb-2">Social Impact</h3>
+                                <p className="text-slate-500">View your community score, challenges, and leaderboard.</p>
                             </motion.div>
                         </div>
                     </motion.div>

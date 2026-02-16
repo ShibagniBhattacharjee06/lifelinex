@@ -17,6 +17,7 @@ export default {
                     hover: '#dc2626'
                 },
                 surface: '#f8fafc', // Clean White/Gray
+                secondary: '#1e293b', // Slate 800 for buttons/text
             }
         },
     },

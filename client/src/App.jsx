@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import React, { useContext } from 'react';
 import AuthContext from './context/AuthContext';
 import Home from './pages/Home';
@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import Lifestyle from './pages/Lifestyle';
+import Impact from './pages/Impact';
 import EmergencyMap from './components/Map/EmergencyMap';
 import LanguageSelector from './components/LanguageSelector';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -14,6 +16,13 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
   if (loading) return <div>Loading...</div>;
   return user ? children : <Navigate to="/login" />;
+};
+
+const GlobalLanguageSelector = () => {
+  const location = useLocation();
+  const hideOnPaths = ['/dashboard', '/profile', '/lifestyle', '/impact', '/map'];
+  if (hideOnPaths.includes(location.pathname)) return null;
+  return <LanguageSelector />;
 };
 
 function App() {
@@ -28,7 +37,7 @@ function App() {
             </div>
           </div>
         }>
-          <LanguageSelector />
+          <GlobalLanguageSelector />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -48,6 +57,16 @@ function App() {
                 <div className="h-screen w-screen">
                   <EmergencyMap />
                 </div>
+              </ProtectedRoute>
+            } />
+            <Route path="/lifestyle" element={
+              <ProtectedRoute>
+                <Lifestyle />
+              </ProtectedRoute>
+            } />
+            <Route path="/impact" element={
+              <ProtectedRoute>
+                <Impact />
               </ProtectedRoute>
             } />
           </Routes>

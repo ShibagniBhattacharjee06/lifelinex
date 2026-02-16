@@ -16,7 +16,7 @@ const HealthCardContent = ({ user, close, updateUserData }) => {
     const handleSave = async () => {
         try {
             const token = localStorage.getItem('token');
-            const { data } = await axios.put('http://localhost:5000/api/auth/update', formData, {
+            const { data } = await axios.put(`${import.meta.env.VITE_API_URL}/api/auth/update`, formData, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             updateUserData(data); // Update global context

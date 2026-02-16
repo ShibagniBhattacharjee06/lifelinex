@@ -222,7 +222,7 @@ const Register = () => {
                             )}
                         </AnimatePresence>
 
-                        <button type="submit" className="w-full bg-secondary hover:bg-slate-900 text-white font-bold py-4 rounded-xl shadow-xl shadow-slate-900/10 transition-all transform hover:scale-[1.01] mt-6">
+                        <button type="submit" className="w-full bg-slate-900 border border-slate-800 text-white font-bold py-4 rounded-xl shadow-xl hover:bg-slate-800 transition-all transform hover:scale-[1.01] mt-6">
                             {t('register.submit')}
                         </button>
                     </form>

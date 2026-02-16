@@ -5,6 +5,8 @@ import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-lea
 import 'leaflet/dist/leaflet.css';
 import { MapPinIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import HealthcareNavbar from '../components/HealthcareNavbar';
+import LanguageSelector from '../components/LanguageSelector';
 
 // Fix Leaflet Marker Icons
 import L from 'leaflet';
@@ -84,13 +86,15 @@ const Profile = () => {
     if (!user) return <div className="p-10 text-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-slate-50 p-6 md:p-12">
+        <div className="min-h-screen bg-slate-50 relative pt-24 pb-12 px-6">
+            <HealthcareNavbar />
+
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100"
             >
-                <div className="bg-primary p-8 text-white">
+                <div className="bg-primary p-8 text-white relative">
                     <h1 className="text-3xl font-bold">My Profile</h1>
                     <p className="opacity-80">Manage your account and location settings</p>
                 </div>
