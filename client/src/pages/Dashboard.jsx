@@ -135,7 +135,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 relative font-sans text-slate-800">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 relative font-sans text-slate-800 overflow-x-hidden">
             {/* Navbar */}
             <HealthcareNavbar />
 

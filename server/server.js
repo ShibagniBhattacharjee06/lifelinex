@@ -71,6 +71,8 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/resources', require('./routes/resourceRoutes'));
 app.use('/api/sos', require('./routes/sosRoutes'));
 app.use('/api/analytics', require('./routes/analyticsRoutes'));
+app.use('/api/lifestyle', require('./routes/lifestyleRoutes'));
+app.use('/api/impact', require('./routes/impactRoutes'));
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

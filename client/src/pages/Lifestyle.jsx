@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import AuthContext from '../context/AuthContext';
 import {
     ArrowLeftIcon,
     BeakerIcon,
@@ -12,20 +14,84 @@ import {
     SunIcon
 } from '@heroicons/react/24/solid';
 import HealthcareNavbar from '../components/HealthcareNavbar';
+import debounce from 'lodash.debounce';
 
 const Lifestyle = () => {
-    const [waterCount, setWaterCount] = useState(3);
+    const { user } = useContext(AuthContext);
+    const [loading, setLoading] = useState(true);
+    const [waterCount, setWaterCount] = useState(0);
     const [sleepHours, setSleepHours] = useState(7);
-    const [mood, setMood] = useState('happy');
+    const [mood, setMood] = useState('neutral');
     const [habits, setHabits] = useState({
         exercise: false,
         meditate: false,
-        read: true,
+        read: false,
         journal: false
     });
 
+    // Fetch today's data on mount
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/lifestyle/today`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                setWaterCount(data.water);
+                setSleepHours(data.sleep);
+                setMood(data.mood);
+                setHabits(data.habits || {
+                    exercise: false,
+                    meditate: false,
+                    read: false,
+                    journal: false
+                });
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching lifestyle data:", error);
+                setLoading(false);
+            }
+        };
+
+        if (user) fetchData();
+    }, [user]);
+
+    // Debounced update function
+    const updateBackend = useCallback(
+        debounce(async (updates) => {
+            try {
+                const token = localStorage.getItem('token');
+                await axios.put(`${import.meta.env.VITE_API_URL}/api/lifestyle/update`, updates, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } catch (error) {
+                console.error("Error updating lifestyle data:", error);
+            }
+        }, 1000),
+        []
+    );
+
+    const handleWaterChange = (newVal) => {
+        const val = Math.max(0, newVal);
+        setWaterCount(val);
+        updateBackend({ water: val });
+    };
+
+    const handleSleepChange = (val) => {
+        setSleepHours(val);
+        updateBackend({ sleep: val });
+    };
+
+    const handleMoodChange = (val) => {
+        setMood(val);
+        updateBackend({ mood: val });
+    };
+
     const toggleHabit = (habit) => {
-        setHabits(prev => ({ ...prev, [habit]: !prev[habit] }));
+        const newHabits = { ...habits, [habit]: !habits[habit] };
+        setHabits(newHabits);
+        updateBackend({ habits: newHabits });
     };
 
     const moodEmoji = {
@@ -36,8 +102,10 @@ const Lifestyle = () => {
         excited: '🤩'
     };
 
+    if (loading) return <div className="text-center pt-40">Loading your wellness stack...</div>;
+
     return (
-        <div className="min-h-screen bg-slate-50 relative font-sans text-slate-800 pb-20 pt-24">
+        <div className="min-h-screen bg-slate-50 relative font-sans text-slate-800 pb-20 pt-24 overflow-x-hidden">
             <HealthcareNavbar />
             <div className="max-w-3xl mx-auto px-6 mb-6 flex items-center gap-4">
                 <Link to="/dashboard" className="p-2 rounded-full hover:bg-slate-100 transition-colors">
@@ -61,11 +129,11 @@ const Lifestyle = () => {
                         <div className="mt-8 flex gap-8">
                             <div>
                                 <p className="text-indigo-200 text-xs font-bold uppercase tracking-wider">Streak</p>
-                                <p className="text-4xl font-black">12 <span className="text-lg opacity-60">days</span></p>
+                                <p className="text-4xl font-black">1 <span className="text-lg opacity-60">day</span></p>
                             </div>
                             <div>
                                 <p className="text-indigo-200 text-xs font-bold uppercase tracking-wider">Completion</p>
-                                <p className="text-4xl font-black">85%</p>
+                                <p className="text-4xl font-black">{Math.round((Object.values(habits).filter(Boolean).length / 4) * 100)}%</p>
                             </div>
                         </div>
                     </div>
@@ -91,7 +159,7 @@ const Lifestyle = () => {
 
                         <div className="flex items-center justify-between">
                             <button
-                                onClick={() => setWaterCount(Math.max(0, waterCount - 1))}
+                                onClick={() => handleWaterChange(waterCount - 1)}
                                 className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-xl text-slate-600 transition"
                             >-</button>
                             <div className="text-center">
@@ -99,7 +167,7 @@ const Lifestyle = () => {
                                 <p className="text-xs text-slate-400 font-bold uppercase">Glasses</p>
                             </div>
                             <button
-                                onClick={() => setWaterCount(waterCount + 1)}
+                                onClick={() => handleWaterChange(waterCount + 1)}
                                 className="w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 flex items-center justify-center font-bold text-xl text-blue-600 transition"
                             >+</button>
                         </div>
@@ -138,7 +206,7 @@ const Lifestyle = () => {
                             max="12"
                             step="0.5"
                             value={sleepHours}
-                            onChange={(e) => setSleepHours(e.target.value)}
+                            onChange={(e) => handleSleepChange(e.target.value)}
                             className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
                         />
                         <div className="flex justify-between mt-2 text-xs font-bold text-slate-400">
@@ -167,7 +235,7 @@ const Lifestyle = () => {
                         {Object.entries(moodEmoji).map(([key, emoji]) => (
                             <button
                                 key={key}
-                                onClick={() => setMood(key)}
+                                onClick={() => handleMoodChange(key)}
                                 className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all min-w-[80px] ${mood === key ? 'bg-yellow-50 border-2 border-yellow-400 scale-105' : 'bg-slate-50 border border-slate-100 hover:bg-slate-100'}`}
                             >
                                 <span className="text-3xl">{emoji}</span>

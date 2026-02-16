@@ -86,7 +86,7 @@ const Profile = () => {
     if (!user) return <div className="p-10 text-center">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-slate-50 relative pt-24 pb-12 px-6">
+        <div className="min-h-screen bg-slate-50 relative pt-24 pb-12 px-6 overflow-x-hidden">
             <HealthcareNavbar />
 
             <motion.div

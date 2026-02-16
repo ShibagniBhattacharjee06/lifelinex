@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import AuthContext from '../context/AuthContext';
 import {
     ArrowLeftIcon,
     TrophyIcon,
@@ -13,23 +15,79 @@ import {
 import HealthcareNavbar from '../components/HealthcareNavbar';
 
 const Impact = () => {
-    // Mock Data
-    const leaderboard = [
-        { id: 1, name: 'Rahul Sharma', score: 2450, badge: '🏆' },
-        { id: 2, name: 'Priya Verma', score: 2100, badge: '🥈' },
-        { id: 3, name: 'Amit Singh', score: 1850, badge: '🥉' },
-        { id: 4, name: 'Sneha Gupta', score: 1600, badge: '⭐' },
-        { id: 5, name: 'Vikram Das', score: 1450, badge: '⭐' },
+    const { user } = useContext(AuthContext);
+    const [loading, setLoading] = useState(true);
+    const [stats, setStats] = useState({ xp: 0, badges: [] });
+    const [leaderboard, setLeaderboard] = useState([]);
+
+    // Mock challenges for now (could be DB driven later)
+    const challenges = [
+        { id: 101, title: 'Blood Hero', desc: 'Donate blood once this month', xp: 500, users: 120, color: 'red' },
+        { id: 102, title: 'First Responder', desc: 'Complete CPR training module', xp: 300, users: 45, color: 'blue' },
+        { id: 103, title: 'Community Watch', desc: 'Verify 3 local AED locations', xp: 200, users: 89, color: 'green' }
     ];
 
-    const challenges = [
-        { id: 1, title: 'Blood Hero', desc: 'Donate blood once this month', xp: 500, users: 120, color: 'red' },
-        { id: 2, title: 'First Responder', desc: 'Complete CPR training module', xp: 300, users: 45, color: 'blue' },
-        { id: 3, title: 'Community Watch', desc: 'Verify 3 local AED locations', xp: 200, users: 89, color: 'green' }
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+
+                const [statsRes, leaderboardRes] = await Promise.all([
+                    axios.get(`${import.meta.env.VITE_API_URL}/api/impact/stats`, { headers: { Authorization: `Bearer ${token}` } }),
+                    axios.get(`${import.meta.env.VITE_API_URL}/api/impact/leaderboard`, { headers: { Authorization: `Bearer ${token}` } })
+                ]);
+
+                setStats(statsRes.data);
+                setLeaderboard(leaderboardRes.data);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching impact data:", error);
+                setLoading(false);
+            }
+        };
+
+        if (user) fetchData();
+    }, [user]);
+
+    const handleShare = async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'My LifeLineX Impact',
+                    text: `I have earned ${stats.xp} XP helping my community on LifeLineX! Join me saving lives.`,
+                    url: window.location.origin
+                });
+            } catch (err) {
+                console.log('Error sharing:', err);
+            }
+        } else {
+            alert('Sharing is not supported on this browser/device.');
+        }
+    };
+
+    const handleJoinChallenge = async (challenge) => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/impact/join-challenge`,
+                { challengeId: challenge.id, xp: challenge.xp },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            alert(`🎉 Joined "${challenge.title}"! Points added to your profile.`);
+            // Optimistic update
+            setStats(prev => ({ ...prev, xp: prev.xp + challenge.xp }));
+        } catch (error) {
+            if (error.response && error.response.data.msg) {
+                alert(error.response.data.msg);
+            } else {
+                alert('Failed to join challenge');
+            }
+        }
+    };
+
+    if (loading) return <div className="text-center pt-40">Loading impact stats...</div>;
 
     return (
-        <div className="min-h-screen bg-slate-50 relative font-sans text-slate-800 pb-20 pt-24">
+        <div className="min-h-screen bg-slate-50 relative font-sans text-slate-800 pb-20 pt-24 overflow-x-hidden">
             <HealthcareNavbar />
             <div className="max-w-3xl mx-auto px-6 mb-6 flex items-center gap-4">
                 <Link to="/dashboard" className="p-2 rounded-full hover:bg-slate-100 transition-colors">
@@ -51,13 +109,16 @@ const Impact = () => {
                         <div className="flex items-center justify-center gap-2 mb-4">
                             <StarIcon className="w-8 h-8 text-yellow-500 animate-pulse" />
                             <h2 className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">
-                                480
+                                {stats.xp}
                             </h2>
                         </div>
-                        <p className="text-slate-400 max-w-sm mx-auto text-sm">You are in the top <span className="text-white font-bold">15%</span> of contributors in your city!</p>
+                        <p className="text-slate-400 max-w-sm mx-auto text-sm">You are making a real difference in your community!</p>
 
                         <div className="mt-8 flex justify-center gap-3">
-                            <button className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 font-bold text-sm transition flex items-center gap-2">
+                            <button
+                                onClick={handleShare}
+                                className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 font-bold text-sm transition flex items-center gap-2"
+                            >
                                 <ShareIcon className="w-4 h-4" /> Share
                             </button>
                             <button className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm transition flex items-center gap-2 shadow-lg shadow-blue-600/30">
@@ -98,7 +159,10 @@ const Impact = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    <button className="px-5 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition shadow-lg">
+                                    <button
+                                        onClick={() => handleJoinChallenge(challenge)}
+                                        className="px-5 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition shadow-lg"
+                                    >
                                         Join
                                     </button>
                                 </div>
@@ -113,7 +177,7 @@ const Impact = () => {
                         <h3 className="text-xl font-black text-slate-800 flex items-center gap-2">
                             <TrophyIcon className="w-6 h-6 text-yellow-500" /> Leaderboard
                         </h3>
-                        <span className="text-xs font-bold text-slate-400 uppercase">This Week</span>
+                        <span className="text-xs font-bold text-slate-400 uppercase">Top Contirbutors</span>
                     </div>
 
                     <div>
@@ -126,9 +190,14 @@ const Impact = () => {
                                     <span className={`w-8 font-black text-lg ${index < 3 ? 'text-slate-800' : 'text-slate-400'}`}>
                                         #{index + 1}
                                     </span>
-                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-sm font-bold shadow-inner">
-                                        {user.name[0]}
-                                    </div>
+                                    {user.profileImage ? (
+                                        <img src={user.profileImage} className="w-10 h-10 rounded-full border border-slate-200" alt={user.name} />
+                                    ) : (
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-sm font-bold shadow-inner">
+                                            {user.name[0]}
+                                        </div>
+                                    )}
+
                                     <div>
                                         <p className="font-bold text-slate-700">{user.name}</p>
                                         <p className="text-xs text-slate-400 font-bold">{user.badge} Super Contributor</p>
