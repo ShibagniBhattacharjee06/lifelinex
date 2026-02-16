@@ -7,6 +7,13 @@
     @apply bg-slate-50 text-slate-900 antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
+
+  /* Prevent iOS zoom on inputs */
+  input,
+  select,
+  textarea {
+    @apply text-base;
+  }
 }
 
 .leaflet-container {

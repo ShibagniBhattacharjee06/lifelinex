@@ -24,7 +24,7 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 relative overflow-x-hidden">
             {/* Premium Background */}
             <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-primary-light/10 rounded-full blur-[120px] pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-accent/5 rounded-full blur-[100px] pointer-events-none"></div>

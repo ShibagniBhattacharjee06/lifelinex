@@ -92,7 +92,7 @@ const Register = () => {
     const labelClass = "block text-slate-600 text-sm font-bold mb-2 ml-1";
 
     return (
-        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 py-12 relative overflow-hidden">
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 py-8 md:py-12 relative overflow-x-hidden">
             {/* Premium Background */}
             <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-primary-light/10 rounded-full blur-[120px] pointer-events-none"></div>
             <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
@@ -101,10 +101,10 @@ const Register = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
-                className="w-full max-w-5xl bg-white/80 backdrop-blur-2xl border border-white/50 p-8 md:p-12 rounded-[2rem] shadow-2xl relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12"
+                className="w-full max-w-5xl bg-white/80 backdrop-blur-2xl border border-white/50 p-6 md:p-12 rounded-[2rem] shadow-2xl relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12"
             >
                 {/* Left Side: Form */}
-                <div className="overflow-y-auto max-h-[80vh] pr-2 custom-scrollbar">
+                <div className="lg:overflow-y-auto lg:max-h-[80vh] lg:pr-2 custom-scrollbar">
                     <div className="mb-8">
                         {/* Logo Placeholder */}
                         <div className="flex items-center gap-3 mb-4">
@@ -121,7 +121,7 @@ const Register = () => {
                         {/* Role Selection */}
                         <div>
                             <label className={labelClass}>{t('register.i_am')}</label>
-                            <div className="grid grid-cols-3 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 {['user', 'donor', 'hospital'].map((r) => (
                                     <div
                                         key={r}
